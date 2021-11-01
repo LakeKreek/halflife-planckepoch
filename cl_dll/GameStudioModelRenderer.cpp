@@ -1,4 +1,4 @@
-﻿//========= Copyright ?1996-2002, Valve LLC, All rights reserved. ============
+//========= Copyright ?1996-2002, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -52,7 +52,7 @@ CGameStudioModelRenderer
 CGameStudioModelRenderer::CGameStudioModelRenderer()
 {
 }
-void CGameStudioModelRenderer::Init(void)
+void CGameStudioModelRenderer::Init()
 {
 	CStudioModelRenderer::Init();
 	InitPhysicsInterface(NULL);
@@ -61,7 +61,7 @@ void CGameStudioModelRenderer::Init(void)
 int CGameStudioModelRenderer::StudioDrawRagdoll(int flags)
 {
 	alight_t lighting;
-	vec3_t dir;
+	Vector dir;
 
 	m_pCurrentEntity = IEngineStudio.GetCurrentEntity();
 	IEngineStudio.GetTimes(&m_nFrameCount, &m_clTime, &m_clOldTime);
@@ -110,7 +110,7 @@ int CGameStudioModelRenderer::StudioDrawRagdoll(int flags)
 		{
 			cl_entity_t* ent = gEngfuncs.GetEntityByIndex(m_pCurrentEntity->index);
 
-			memcpy(ent->attachment, m_pCurrentEntity->attachment, sizeof(vec3_t) * 4);
+			memcpy(ent->attachment, m_pCurrentEntity->attachment, sizeof(Vector) * 4);
 		}
 	}
 
@@ -211,36 +211,39 @@ int CGameStudioModelRenderer::StudioDrawModel(int flags)
 
 #pragma region Note
 
+	//Translated from Chinsese.
+	//Comment in English if you want your code to be used worldwide.
+
 	//if (IsRagdollEntity(m_pCurrentEntity))
-	//	return StudioDrawRagdoll(flags);
+	// return StudioDrawRagdoll(flags);
 
 	//bool IsRagdollModelAndInDeathSequence;//TODO
-	//// 如果当前模型支持布娃娃 且 处于死亡动画
+	//// If the current model supports ragdolls and is in death animation
 	//if (IsRagdollModelAndInDeathSequence)
 	//{
-	//	// 如果实体原来处于非死亡状态
-	//	if (!IsEntityDying(m_pCurrentEntity->index)) 
-	//	{
-	//		// 到此说明正在播放首帧死亡动画
-	//		// TODO: 创建临时实体，赋给它一个布娃娃控制器，激活布娃娃控制器
-	//		SetEntityDying(m_pCurrentEntity->index, true);
-	//	}
-	//	else
-	//	{
-	//		// 到此说明实体早已死了，已经给它创建过布娃娃尸体实体了，就不渲染这个实体了。
-	//		return 0;
-	//	}
+	// // If the entity was originally in a non-dead state
+	// if (!IsEntityDying(m_pCurrentEntity->index))
+	// {
+	// // So far, it means that the first frame of death animation is playing
+	// // TODO: Create a temporary entity, assign it a ragdoll controller, activate the ragdoll controller
+	// SetEntityDying(m_pCurrentEntity->index, true);
 	//}
-	//else 
+	// else
+	// {
+	// // At this point, the entity is already dead, and the ragdoll corpse entity has been created for it, so this entity will not be rendered.
+	// return 0;
+	//}
+	//}
+	//else
 	//{
-	//	// 对于不支持的动画来说，这个步骤不影响任何东西；
-	//	// 对于支持布娃娃的模型 但 正在播放非死亡动画，说明实体活着。
-	//	SetEntityDying(m_pCurrentEntity->index, false);
+	// // For unsupported animations, this step does not affect anything;
+	// // For models that support ragdolls, but a non-death animation is being played, indicating that the entity is alive.
+	// SetEntityDying(m_pCurrentEntity->index, false);
 	//}
 
 #pragma endregion
 
-	// 正常渲染
+	// Normal rendering (正常渲染)
 	return CStudioModelRenderer::StudioDrawModel(flags);
 }
 

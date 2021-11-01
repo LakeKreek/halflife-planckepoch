@@ -55,8 +55,11 @@ extern engine_studio_api_t IEngineStudio;
 #include "tri.h"
 #include "vgui_TeamFortressViewport.h"
 #include "../public/interface.h"
+
+//RENDERERS START
 #include "phy_corpse.h"
-#include"physics.h"
+#include "physics.h"
+//RENDERERS END
 
 cl_enginefunc_t gEngfuncs;
 CHud gHUD;

@@ -195,6 +195,9 @@ public:
 	// Cached bone & light transformation matrices
 	float			m_rgCachedBoneTransform [ MAXSTUDIOBONES ][ 3 ][ 4 ];
 
+	// Software renderer scale factors
+	float			m_fSoftwareXScale, m_fSoftwareYScale;
+
 public:
 	virtual void	StudioSetupModel( int bodypart );
 	virtual void	StudioDrawPoints( );
