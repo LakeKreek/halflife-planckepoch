@@ -155,6 +155,7 @@ EXIT /B 0</Command>
     <ClCompile Include="..\..\cl_dll\postprocess.cpp" />
     <ClCompile Include="..\..\cl_dll\propmanager.cpp" />
     <ClCompile Include="..\..\cl_dll\rendererdefs.cpp" />
+    <ClCompile Include="..\..\cl_dll\physics.cpp" />
     <ClCompile Include="..\..\cl_dll\saytext.cpp" />
     <ClCompile Include="..\..\cl_dll\statusbar.cpp" />
     <ClCompile Include="..\..\cl_dll\status_icons.cpp" />
@@ -235,6 +236,8 @@ EXIT /B 0</Command>
     <ClInclude Include="..\..\cl_dll\postprocess.h" />
     <ClInclude Include="..\..\cl_dll\propmanager.h" />
     <ClInclude Include="..\..\cl_dll\rendererdefs.h" />
+    <ClInclude Include="..\..\cl_dll\physics.h" />
+    <ClInclude Include="..\..\cl_dll\phy_corpse.h" />
     <ClInclude Include="..\..\cl_dll\StudioModelRenderer.h" />
     <ClInclude Include="..\..\cl_dll\textureloader.h" />
     <ClInclude Include="..\..\cl_dll\tri.h" />

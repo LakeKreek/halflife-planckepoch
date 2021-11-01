@@ -19,6 +19,9 @@
 #include "bsprenderer.h"
 #include "particle_engine.h"
 #include "mirrormanager.h"
+#include"com_model.h"
+#include "physics.h"
+#include"phy_corpse.h"
 
 #include "StudioModelRenderer.h"
 #include "GameStudioModelRenderer.h"
@@ -72,6 +75,26 @@ int DLLEXPORT HUD_AddEntity( int type, struct cl_entity_s *ent, const char *mode
 				ent->index == g_iUser2 )
 			return 0;	// don't draw the player we are following in eye
 
+	}
+	if (!gMapExistTempEnt)
+	{
+		cl_entity_t* local = gEngfuncs.GetLocalPlayer();
+		TEMPENTITY* tent = gEngfuncs.pEfxAPI->CL_TempEntAllocNoModel(local->curstate.origin);
+		tent->die = 0x7fffffff;
+		gMapExistTempEnt = 1;
+	}
+
+	if (ent->index&&ent->index<512)
+	{
+		if (ent->model->type == modtype_t::mod_brush)
+		{
+			gPhysics.AddCollider(ent);
+		}
+		else if(ent->model->type == modtype_t::mod_studio)
+		{
+			if (!pgCorpseMgr->IsEntityDead(ent))
+				gPhysics.AddCollider(ent);
+		}
 	}
 
 	return 1;
@@ -520,6 +543,9 @@ void DLLEXPORT HUD_TempEntUpdate (
 		}
 		if ( !active )		// Kill it
 		{
+			if (pTemp->callback && pTemp->flags & FTENT_KILLCALLBACK)
+				pTemp->callback(pTemp, frametime, client_time);
+
 			pTemp->next = *ppTempEntFree;
 			*ppTempEntFree = pTemp;
 			if ( !pprev )	// Deleting at head of list
@@ -806,6 +832,7 @@ void DLLEXPORT HUD_TempEntUpdate (
 finish:
 	// Restore state info
 	gEngfuncs.pEventAPI->EV_PopPMStates();
+	gPhysics.Update(frametime);
 }
 
 /*

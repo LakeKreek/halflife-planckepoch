@@ -55,6 +55,8 @@ extern engine_studio_api_t IEngineStudio;
 #include "tri.h"
 #include "vgui_TeamFortressViewport.h"
 #include "../public/interface.h"
+#include "phy_corpse.h"
+#include"physics.h"
 
 cl_enginefunc_t gEngfuncs;
 CHud gHUD;
@@ -173,7 +175,7 @@ int DLLEXPORT Initialize( cl_enginefunc_t *pEnginefuncs, int iVersion )
 	return 1;
 }
 
-
+bool g_bNewMapStarted = false;
 /*
 ==========================
 	HUD_VidInit
@@ -190,8 +192,69 @@ int DLLEXPORT HUD_VidInit()
 	gHUD.VidInit();
 
 	VGui_Startup();
+
+	const char* pLevelName=gEngfuncs.pfnGetLevelName();
 	
+	g_bNewMapStarted = true;
+
 	return 1;
+}
+
+/**
+*	A new map has been started. - Solokiller
+*	@param pszMapName Name of the map, without path or extension.
+*/
+void HUD_NewMapStarted(const char* const pszMapName)
+{
+	gEngfuncs.Con_Printf("New map started: %s\n", pszMapName);
+}
+
+/**
+*	Checks if a new map has been started. If so, calls HUD_NewMapStarted.
+*	- Solokiller
+*/
+void HUD_CheckNewMapStarted()
+{
+	if (g_bNewMapStarted)
+	{
+		g_bNewMapStarted = false;
+
+		const char* pszLevelName = gEngfuncs.pfnGetLevelName();
+
+		char szMapName[MAX_PATH];
+
+		const int iResult = sscanf(pszLevelName, "maps/%s.bsp", szMapName);
+
+		if (iResult == 1)
+		{
+			const size_t uiLength = strlen(szMapName);
+
+			//These checks are mostly to prevent crashes if the engine screws up. Better safe than sorry, it's only done once a map load.
+			const size_t uiExtLength = strlen(".bsp");
+
+			//Trim the .bsp part.
+			if (uiLength > uiExtLength)
+			{
+				szMapName[uiLength - uiExtLength] = '\0';
+			}
+
+			HUD_NewMapStarted(szMapName);
+			if (pszLevelName && pszLevelName[0]) {
+				gPhysics.ChangeLevel(pszLevelName);
+				if (!pgCorpseMgr)
+					delete pgCorpseMgr;
+				pgCorpseMgr = new CorpseManager();
+				gMapExistTempEnt = 0;
+			}
+		}
+		else
+		{
+			//Failed to get the map name, so quit now.
+			//This should never happen, but if it does, we're kinda screwed.
+			gEngfuncs.pfnClientCmd("disconnect\n");
+			gEngfuncs.Con_Printf("HUD_CheckNewMapStarted: Couldn't get map name from level name!\n");
+		}
+	}
 }
 
 /*
