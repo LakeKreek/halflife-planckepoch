@@ -407,11 +407,6 @@ int __MsgFunc_PPGray(const char* pszName, int iSize, void* pbuf)
 	gHUD.MsgFunc_PPGray(pszName, iSize, pbuf);
 	return 1;
 }
-int __MsgFunc_WpnSkn(const char* pszName, int iSize, void* pbuf)
-{
-	gHUD.MsgFunc_WpnSkn(pszName, iSize, pbuf);
-	return 1;
-}
 
 
 //void InitPostEffects(); //Forward Declaration for Post-Processing
@@ -489,7 +484,6 @@ void CHud :: Init()
 	HOOK_MESSAGE( FreeEnt );
 	HOOK_MESSAGE( Particle );
 	HOOK_MESSAGE( PPGray );
-	HOOK_MESSAGE( WpnSkn );
 
 	gPropManager.Init();
 	gTextureLoader.Init();
@@ -554,7 +548,7 @@ void CHud :: Init()
 	m_Spectator.Init();
 	m_Geiger.Init();
 	m_Train.Init();
-	m_Battery.Init();
+	// m_Battery.Init();
 	m_Flash.Init();
 	m_Message.Init();
 	m_StatusBar.Init();
@@ -767,7 +761,7 @@ void CHud :: VidInit()
 	m_Spectator.VidInit();
 	m_Geiger.VidInit();
 	m_Train.VidInit();
-	m_Battery.VidInit();
+	// m_Battery.VidInit();
 	m_Flash.VidInit();
 	m_Message.VidInit();
 	m_StatusBar.VidInit();

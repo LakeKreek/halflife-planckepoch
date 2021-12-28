@@ -47,8 +47,6 @@ Transparency code by Neil "Jed" Jedrzejewski
 #include "bsprenderer.h"
 #include "StudioModelRenderer.h"
 
-int g_iViewmodelSkin;
-
 // Global engine <-> studio model rendering code interface
 engine_studio_api_t IEngineStudio;
 
@@ -2481,21 +2479,6 @@ Studio_FxTransform
 */
 void CStudioModelRenderer::StudioFxTransform( cl_entity_t *ent, float transform[3][4] )
 {
-	if (ent->curstate.renderfx != kRenderFxExplode && ent->curstate.scale > 0)
-	{
-		transform[0][0] *= ent->curstate.scale;
-		transform[1][0] *= ent->curstate.scale;
-		transform[2][0] *= ent->curstate.scale;
-
-		transform[0][1] *= ent->curstate.scale;
-		transform[1][1] *= ent->curstate.scale;
-		transform[2][1] *= ent->curstate.scale;
-
-		transform[0][2] *= ent->curstate.scale;
-		transform[1][2] *= ent->curstate.scale;
-		transform[2][2] *= ent->curstate.scale;
-	}
-		
 	switch( ent->curstate.renderfx )
 	{
 	case kRenderFxDistort:
@@ -2928,9 +2911,6 @@ int CStudioModelRenderer::StudioDrawModel( int flags )
 
 	StudioSetUpTransform(0);
 	StudioSetupBones();
-
-	if (m_pCurrentEntity == gEngfuncs.GetViewModel()) //Skins
-		m_pCurrentEntity->curstate.skin = g_iViewmodelSkin;
 
 	if (flags & STUDIO_EVENTS)
 	{

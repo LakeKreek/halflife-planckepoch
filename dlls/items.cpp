@@ -247,17 +247,15 @@ class CItemBattery : public CItem
 	}
 	BOOL MyTouch( CBasePlayer *pPlayer ) override
     {
-		if ((pPlayer->pev->armorvalue < MAX_NORMAL_BATTERY) &&
+		if ((pPlayer->m_iFlashBattery < MAX_NORMAL_BATTERY) &&
 			(pPlayer->pev->weapons & (1<<WEAPON_SUIT)))
 		{
 			int pct;
 			char szcharge[64];
 			
-			if (pev->armorvalue)
-				pPlayer->pev->armorvalue += pev->armorvalue;
-			else
-				pPlayer->pev->armorvalue += gSkillData.batteryCapacity;
-			pPlayer->pev->armorvalue = V_min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+			
+			pPlayer->m_iFlashBattery += gSkillData.batteryCapacity;
+			pPlayer->m_iFlashBattery = V_min(pPlayer->m_iFlashBattery, MAX_NORMAL_BATTERY);
 
 			if (pev->noise)
 				EMIT_SOUND( pPlayer->edict(), CHAN_ITEM, STRING(pev->noise), 1, ATTN_NORM ); //LRC
@@ -271,7 +269,7 @@ class CItemBattery : public CItem
 			
 			// Suit reports new power level
 			// For some reason this wasn't working in release build -- round it.
-			pct = (int)( (float)(pPlayer->pev->armorvalue * 100.0) * (1.0/MAX_NORMAL_BATTERY) + 0.5);
+			pct = (int)( (float)(pPlayer->m_iFlashBattery * 100.0) * (1.0/MAX_NORMAL_BATTERY) + 0.5);
 			pct = (pct / 5);
 			if (pct > 0)
 				pct--;

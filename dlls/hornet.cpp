@@ -61,8 +61,6 @@ void CHornet :: Spawn()
 {
 	Precache();
 
-	m_fCanBleed = FALSE;
-
 	pev->movetype	= MOVETYPE_FLY;
 	pev->solid		= SOLID_BBOX;
 	pev->takedamage = DAMAGE_YES;

@@ -18,22 +18,6 @@
 #include "effects.h"
 #include "UserMessages.h"
 
-/*
-#ifdef CLIENT_DLL
-#define SetWeaponSkin(x) 
-#else
-#define SetWeaponSkin(x){ MESSAGE_BEGIN(MSG_ONE, gmsgViewmodelSkin, nullptr, m_pPlayer->pev); WRITE_SHORT(x); MESSAGE_END()
-#endif // CLIENT
-*/
-
-#ifdef CLIENT_DLL
-#define SetWeaponSkin(x) 
-#else
-//I hate macros.
-#define SWP_BASE(x) MESSAGE_BEGIN(MSG_ONE, gmsgViewmodelSkin, nullptr, m_pPlayer->pev); WRITE_SHORT(x); MESSAGE_END()
-#define SetWeaponSkin(x) if (m_pPlayer) { SWP_BASE(x); } pev->skin = x
-#endif // CLIENT
-
 class CBasePlayer;
 
 void DeactivateSatchels( CBasePlayer *pOwner );
@@ -51,15 +35,8 @@ public:
 	static CGrenade *ShootSatchelCharge( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity );
 	static void UseSatchelCharges( entvars_t *pevOwner, SATCHELCODE code );
 
-	void ShootShrapnel();
-
 	void Explode( Vector vecSrc, Vector vecAim );
 	void Explode( TraceResult *pTrace, int bitsDamageType );
-
-	// Ear Ringing
-	int CalcDamageDirection(Vector vecFrom, CBasePlayer* playaPtr);
-	int EmitDir();
-
 	void EXPORT Smoke();
 
 	void EXPORT BounceTouch( CBaseEntity *pOther );
@@ -76,15 +53,6 @@ public:
     void Killed( entvars_t *pevAttacker, int iGib ) override;
 
 	BOOL m_fRegisteredSound;// whether or not this grenade has issued its DANGER sound to the world sound list yet.
-
-	// Ear Ringing
-	float m_fAttackFront, m_fAttackRear, m_fAttackLeft, m_fAttackRight;
-
-	//Shrapnel System
-	BOOL m_bSimulateShrapnel;
-	int m_iLineCount;
-	float m_iLineCountNextRot;
-
 };
 
 
@@ -396,19 +364,7 @@ public:
 
 	//LRC - used by weaponstrip
 	void DrainClip(CBasePlayer* pPlayer, BOOL keep, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock, int iUranium, int iSatchel, int iSnark, int iTrip, int iGren );
-
-	//RENDERERS START
-	//Set Weapon Skinfamilies
-	/*
-	inline void SetWeaponSkin(int x)
-	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgViewmodelSkin, nullptr, m_pPlayer->pev);
-			WRITE_SHORT(x);
-		MESSAGE_END();
-	}
-	*/
-	//RENDERERS END
-
+		
 	int	PrimaryAmmoIndex() override;
 	int	SecondaryAmmoIndex() override;
 

@@ -51,7 +51,7 @@
 #include "com_model.h"
 #include <fstream> 
 #include <iostream>
-//using namespace std; //Really, Mr. Lucas? Right in front of my salad?
+using namespace std;
 //RENDERERS END
 
 extern DLL_GLOBAL ULONG		g_ulModelIndexPlayer;
@@ -1080,10 +1080,6 @@ void StartFrame()
 
 void ClientPrecache()
 {
-	//RENDERERS START
-	UTIL_PrecacheOther("env_bloodpuddle");
-	//RENDERERS END
-
 	// setup precaches always needed
 	PRECACHE_SOUND("player/sprayer.wav");			// spray paint sound for PreAlpha
 

@@ -205,8 +205,6 @@ void CLeech::Spawn()
 	SetTouch( nullptr );
 	pev->view_ofs = g_vecZero;
 
-	m_fCanBleed = FALSE;
-
 	m_flTurning = 0;
 	m_fPathBlocked = FALSE;
 	SetActivity( ACT_SWIM );

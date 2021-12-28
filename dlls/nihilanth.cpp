@@ -299,8 +299,6 @@ void CNihilanth :: Spawn()
 
 	m_flFieldOfView = -1; // 360 degrees
 
-	m_fCanBleed = FALSE;
-
 	pev->sequence = 0;
 	ResetSequenceInfo( );
 

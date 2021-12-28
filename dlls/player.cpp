@@ -78,7 +78,7 @@ extern CGraph	WorldGraph;
 #define TRAIN_FAST		0x04
 #define TRAIN_BACK		0x05
 
-#define	FLASH_DRAIN_TIME	 1.2 //100 units/3 minutes
+#define	FLASH_DRAIN_TIME	 0.7 //100 units/3 minutes
 #define	FLASH_CHARGE_TIME	 0.2 // 100 units/20 seconds  (seconds per unit)
 
 //#ifdef XENWARRIOR
@@ -2493,6 +2493,7 @@ void CBasePlayer::CheckSuitUpdate()
 
 void CBasePlayer::SetSuitUpdate(const char *name, int fgroup, int iNoRepeatTime)
 {
+	return;
 	int i;
 	int isentence;
 	int iempty = -1;
@@ -3534,7 +3535,7 @@ BOOL CBasePlayer :: FlashlightIsOn()
 
 void CBasePlayer :: FlashlightTurnOn()
 {
-	if ( !g_pGameRules->FAllowFlashlight() )
+	if (!g_pGameRules->FAllowFlashlight() || !m_iFlashBattery)
 	{
 		return;
 	}
@@ -4533,36 +4534,29 @@ void CBasePlayer :: UpdateClientData()
 		Rain_needsUpdate = 0;
 	}
 
-	// Update Flashlight
-	if ((m_flFlashLightTime) && (m_flFlashLightTime <= gpGlobals->time))
-	{
-		if (FlashlightIsOn())
-		{
-			if (m_iFlashBattery)
-			{
-				m_flFlashLightTime = FLASH_DRAIN_TIME + gpGlobals->time;
-				m_iFlashBattery--;
+	    // Update Flashlight
+    if ((m_flFlashLightTime) && (m_flFlashLightTime <= gpGlobals->time))
+    {
+        if (FlashlightIsOn())
+        {
+            if (m_iFlashBattery)
+            {
+                m_flFlashLightTime = FLASH_DRAIN_TIME + gpGlobals->time;
+                m_iFlashBattery--;
+                
+                if (!m_iFlashBattery)
+                    FlashlightTurnOff();
+            }
+        }
+        else
+        {
+            m_flFlashLightTime = 0;
+        }
 
-				if (!m_iFlashBattery)
-					FlashlightTurnOff();
-			}
-		}
-		else
-		{
-			if (m_iFlashBattery < 100)
-			{
-				m_flFlashLightTime = FLASH_CHARGE_TIME + gpGlobals->time;
-				m_iFlashBattery++;
-			}
-			else
-				m_flFlashLightTime = 0;
-		}
-
-		MESSAGE_BEGIN( MSG_ONE, gmsgFlashBattery, nullptr, pev );
-		WRITE_BYTE(m_iFlashBattery);
-		MESSAGE_END();
-	}
-
+        MESSAGE_BEGIN( MSG_ONE, gmsgFlashBattery, NULL, pev );
+        WRITE_BYTE(m_iFlashBattery);
+        MESSAGE_END();
+    }
 
 	if (m_iTrain & TRAIN_NEW)
 	{

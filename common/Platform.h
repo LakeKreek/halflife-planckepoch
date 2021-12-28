@@ -48,10 +48,6 @@ using func_t = unsigned int;
 using string_t = unsigned int;
 using qboolean = int;
 
-#ifdef ARRAYSIZE
-#undef ARRAYSIZE
-#endif
-
 #define ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
 
 // Prevent tons of unused windows definitions

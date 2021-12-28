@@ -32,7 +32,6 @@ This file contains "stubs" of class member implementations so that we can predic
 
 // Globals used by game logic
 int gmsgWeapPickup = 0;
-int gmsgViewmodelSkin = 0;
 enginefuncs_t g_engfuncs;
 globalvars_t  *gpGlobals;
 

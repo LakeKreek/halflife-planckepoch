@@ -385,11 +385,4 @@ int CHud::MsgFunc_PPGray(const char* pszName, int iSize, void* pbuf)
 
 	return 1;
 }
-int CHud::MsgFunc_WpnSkn(const char* pszName, int iSize, void* pbuf)
-{
-	BEGIN_READ(pbuf, iSize);
-		g_iViewmodelSkin = READ_SHORT();
-
-	return 1;
-}
 //RENDERERS END
